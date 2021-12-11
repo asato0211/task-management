@@ -5,9 +5,9 @@ reboot:
 	docker-compose up
 
 in:
-	docker exec -it web /bin/bash
+	docker exec -it task-management /bin/bash
 
 migration:
-	docker exec -it web rails db:create
-	docker exec -it web rails db:migrate
-	docker exec -it web rails db:seed
+	docker exec -it task-management rails db:create
+	docker exec -it task-management rails db:migrate
+	docker exec -it task-management rails db:seed
