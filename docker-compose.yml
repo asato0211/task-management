@@ -14,7 +14,7 @@ services:
   web:
     build: ./task-management
     container_name: task-management
-    command: rails s -p 3000 -b '0.0.0.0'
+    command: bundle exec foreman start -f Procfile.dev
     volumes:
       - ./task-management:/task-management
     ports:
