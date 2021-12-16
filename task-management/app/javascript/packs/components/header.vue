@@ -1,22 +1,20 @@
 <template>
   <div>
     <ul id="dropdown" class="dropdown-content">
-      <li><a href="#">Top</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><router-link to="/">Top</router-link></li>
+      <li><router-link to="/about">About</router-link></li>
     </ul>
     <nav>
       <div class="nav-wrapper container">
         <a href="/" class="brand-logo left">タスク管理アプリ</a>
         <ul class="right hide-on-med-and-down">
-          <li><a href="#">Top</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><router-link to="/">Top</router-link></li>
+          <li><router-link to="/about">About</router-link></li>
         </ul>
         <ul class="right hide-on-large-only">
           <li>
             <a class="dropdown-button" href="#!" data-activates="dropdown">
-              Menu<i class="material-icons right">arrow_drop_down_circle</i>
+              MENU<i class="material-icons right">arrow_drop_down_circle</i>
             </a>
           </li>
         </ul>
