@@ -37,7 +37,7 @@
         <li
         v-bind:id="'row_task_' + task.id"
         class="collection-item"
-        v-for="task in filteredTasks"
+        v-for="task in !filteredTasks"
         :key="task.id">
           <label v-bind:for="'task_' + task.id"  class="line-through">
             <input type="checkbox" v-bind:id="'task_' + task.id" checked="checked"/>
