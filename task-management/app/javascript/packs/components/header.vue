@@ -6,7 +6,7 @@
     </ul>
     <nav>
       <div class="nav-wrapper container">
-        <a href="/" class="brand-logo left">タスク管理アプリ</a>
+        <router-link to="/" class="brand-logo left">タスク管理アプリ</router-link>
         <ul class="right hide-on-med-and-down">
           <li><router-link to="/">Top</router-link></li>
           <li><router-link to="/about">About</router-link></li>
@@ -14,7 +14,7 @@
         <ul class="right hide-on-large-only">
           <li>
             <a class="dropdown-button" href="#!" data-activates="dropdown">
-              MENU<i class="material-icons right">arrow_drop_down_circle</i>
+              概要<i class="material-icons right">arrow_drop_down</i>
             </a>
           </li>
         </ul>
