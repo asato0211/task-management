@@ -13,7 +13,7 @@
     </div>
     
     <!-- タスク一覧を表示 -->
-    <div>
+    <div id="not-finished-task">
       <ul class="collection">
         <li
         v-bind:id="'row_task_' + task.id"
@@ -21,10 +21,8 @@
         v-for="task in tasks"
         v-if="!task.done">
           <label v-bind:for="'task_' + task.id">
-            <input type="checkbox" v-bind:id="'task_' + task.id" v-on:change="doneTask(task.id)" />
-            <span>
-              <label class="word-color-black">{{ task.title }}</label>
-            </span>
+            <input type="checkbox" v-bind:id="'task_' + task.id" v-on:change="doneTask(task.id)"/>
+            <span class="word-color-black">{{ task.title }}</span>
           </label>
         </li>
       </ul>
@@ -42,10 +40,8 @@
         v-for="task in tasks"
         v-if="task.done">
           <label v-bind:for="'task_' + task.id">
-            <input type="checkbox" v-bind:id="'task_' + task.id" checked="checked"/>
-            <span>
-              <label class="line-through">{{ task.title }}</label>
-            </span>
+            <input type="checkbox" v-bind:id="'task_' + task.id" checked="checked" v-on:change="notDoneTask(task.id)"/>
+            <span>{{ task.title }}</span>
           </label>
         </li>
       </ul>
@@ -92,7 +88,7 @@
         });
       },
 
-      // 完了済みタスク一覧を表示する
+      // 完了済みタスクに更新する
       doneTask(task_id) {
         axios.put('/api/tasks/' + task_id, { task: { done: true } }).then((response) => {
           this.moveFinishedTask(task_id);
@@ -101,23 +97,33 @@
         });
       },
 
-      // タスク一覧→チェックボックスを押した際に動作する
+      // ボタン→完了済みタスク一覧を表示する(デフォルトは非表示)
       displayFinishedTasks() {
-        document.querySelector('#finished-tasks').classList.toggle('display_none');
+        document.getElementById('finished-tasks').classList.toggle('display_none');
       },
 
       // 完了済みタスク一覧に移動
       moveFinishedTask(task_id) {
         const el = document.querySelector('#row_task_' + task_id);
-        // DOMをクローンしておく
         const el_clone = el.cloneNode(true);  // DOMをクローンしておく
         el.classList.add('display_none');     // 未完了のタスクを先に非表示にする
         // スタイルをあてて完了済みタスク一覧に追加する
         el_clone.getElementsByTagName('input')[0].checked = 'checked';
-        el_clone.getElementsByTagName('label')[0].classList.add('line-through');
-        el_clone.getElementsByTagName('label')[0].classList.remove('word-color-black');
+        el_clone.getElementsByTagName('span')[0].classList.remove('word-color-black');
         const li = document.querySelector('#finished-tasks > ul > li:first-child');
         document.querySelector('#finished-tasks > ul').insertBefore(el_clone, li);
+        doneTask();
+      },
+
+      // 未完了タスク一覧に戻す (done = false)
+      notDoneTask(task_id) {
+        axios.put('/api/tasks/' + task_id, { task: { done: false } }).then((response) => {
+          const el = document.querySelector('#row_task_' + task_id);
+          el.classList.add('display_none');
+          this.tasks.unshift(response.data.task);
+        }, (error) => {
+          console.log(error);
+        });
       }
     }
   }
@@ -140,10 +146,7 @@
     background-color: #ddd;
   }
   .display_none {
-    display:none;
-  }
-  .line-through {
-    text-decoration: line-through;
+    display :none;
   }
   .btn-custom {
     text-transform: none;
