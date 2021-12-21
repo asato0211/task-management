@@ -1,6 +1,5 @@
 class Api::TasksController < ApplicationController
   protect_from_forgery
-  # skip_before_action :verify_authenticity_token
 
   # GET /tasks
   def index
@@ -22,6 +21,7 @@ class Api::TasksController < ApplicationController
   # PATCH/PUT /tasks/task_id
   def update
     @task = Task.find(params[:id])
+
     if @task.update(task_params)
       render :show, status: :ok
     else
@@ -32,6 +32,7 @@ class Api::TasksController < ApplicationController
   # DESTROY /tasks/task_id
   def destroy
     @task = Task.find(params[:id])
+    
     if @task.destroy!
       render :show, status: :ok
     else
