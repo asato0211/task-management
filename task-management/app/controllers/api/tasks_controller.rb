@@ -1,5 +1,6 @@
 class Api::TasksController < ApplicationController
-  protect_from_forgery  # 後でトークン認証を実装する
+  protect_from_forgery
+  # skip_before_action :verify_authenticity_token
 
   # GET /tasks
   def index
@@ -18,7 +19,7 @@ class Api::TasksController < ApplicationController
     end
   end
 
-  # PATCH/PUT /tasks/1
+  # PATCH/PUT /tasks/task_id
   def update
     @task = Task.find(params[:id])
     if @task.update(task_params)
@@ -27,6 +28,16 @@ class Api::TasksController < ApplicationController
       render json: @task.errors, status: :unprocessable_entity
     end
   end
+
+  # DESTROY /tasks/task_id
+  def destroy
+    @task = Task.find(params[:id])
+    if @task.destroy!
+      render :show, status: :ok
+    else
+      render json: @task.errors, status: :unprocessable_entity
+    end
+  end 
 
     private
 

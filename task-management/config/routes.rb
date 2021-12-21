@@ -3,6 +3,6 @@ Rails.application.routes.draw do
   get '/about',   to: 'home#index'
 
   namespace :api, format: 'json' do
-    resources :tasks, only: [:index, :create, :update]
+    resources :tasks, only: [:index, :create, :update, :destroy]
   end
 end
