@@ -1,6 +1,6 @@
 import Vue from 'vue/dist/vue.esm.js'
 import VueRouter from 'vue-router'
-import Index from '../components/index.vue'
+import Todo from '../components/todo.vue'
 import About from '../components/about.vue'
 
 Vue.use(VueRouter)
@@ -8,7 +8,7 @@ Vue.use(VueRouter)
 export default new VueRouter({
   mode: 'history',  // historyモード(URLの書き換え)
   routes: [
-    { path: '/', component: Index },
+    { path: '/', component: Todo },
     { path: '/about', component: About }
   ],
 })
