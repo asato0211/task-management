@@ -16,6 +16,7 @@ test:
 
 production:
   <<: *default
-  database: task_management_production
-  username: task_management
-  password: <%= ENV['TASK_MANAGEMENT_DATABASE_PASSWORD'] %>
+  database: <%= ENV['MYSQL_DATABASE'] %>
+  username: <%= ENV['MYSQL_USERNAME'] %>
+  password: <%= ENV['MYSQL_PASSWORD'] %>
+  host: <%= ENV['MYSQL_HOST'] %>

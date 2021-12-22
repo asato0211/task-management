@@ -12,9 +12,9 @@ services:
       - mysql-data:/var/lib/mysql
 
   web:
-    build: ./task-management
+    build: .
     container_name: task-management
-    command: /bin/sh -c "rm -f /task-management/tmp/pids/server.pid && bundle exec foreman start -f Procfile.dev"
+    command: /bin/sh -c "rm -f ./task-management/tmp/pids/server.pid && bundle exec foreman start -f Procfile.dev"
     volumes:
       - ./task-management:/task-management
     ports:
