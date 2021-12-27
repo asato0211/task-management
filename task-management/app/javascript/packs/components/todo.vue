@@ -79,7 +79,7 @@
     methods: {
       // APIで取得した値をdataに格納する(tasks=未完了タスク、doneTasks=完了済みタスク)
       fetchTasks() {
-        axios.get('/api/tasks').then((response) => {
+        axios.get('/api/v1/tasks').then((response) => {
           for(let i = 0; i < response.data.tasks.length; i++) {
             if (response.data.tasks[i].done) {
               this.doneTasks.push(response.data.tasks[i])
@@ -95,7 +95,7 @@
       // 新規タスクを追加
       createTask() {
         if (!this.newTask) return;
-        axios.post('/api/tasks', { task: { title: this.newTask } }).then((response) => {
+        axios.post('/api/v1/tasks', { task: { title: this.newTask } }).then((response) => {
           this.tasks.unshift(response.data.task);
           this.newTask = '';
         }, (error) => {
@@ -105,7 +105,7 @@
 
       // 完了済みタスク一覧に移動
       doneTask(task_id) {
-        axios.put('/api/tasks/' + task_id, { task: { done: true } }).then((response) => {
+        axios.put('/api/v1/tasks/' + task_id, { task: { done: true } }).then((response) => {
           const index = this.tasks.findIndex((task) => task.id === task_id);
           this.doneTasks.unshift(response.data.task);
           this.tasks.splice(index,1)
@@ -121,7 +121,7 @@
 
       // 未完了タスク一覧に戻す
       notDoneTask(task_id) {
-        axios.put('/api/tasks/' + task_id, { task: { done: false } }).then((response) => {
+        axios.put('/api/v1/tasks/' + task_id, { task: { done: false } }).then((response) => {
           const index = this.doneTasks.findIndex((task) => task.id === task_id);
           this.tasks.unshift(response.data.task);
           this.doneTasks.splice(index,1);
@@ -132,7 +132,7 @@
 
       // タスクを削除(完了済み一覧から)
       deleteTask(task_id) {
-        axios.delete('/api/tasks/' + task_id, { task: { done: false } }).then((response) => {
+        axios.delete('/api/v1/tasks/' + task_id, { task: { done: false } }).then((response) => {
           const index = this.doneTasks.findIndex((task) => task.id === task_id);
           this.doneTasks.splice(index, 1);
         }, (error) => {

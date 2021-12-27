@@ -1,4 +1,4 @@
-class Api::TasksController < ApplicationController
+class Api::V1::TasksController < ApplicationController
   protect_from_forgery
 
   # GET /tasks
