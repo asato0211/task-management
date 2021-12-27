@@ -6,7 +6,7 @@
         <input v-model="newTask" id="new-task-form" class="form-control padding-default" placeholder="タスクを追加してください!">
       </div>
       <div class="col s2 m1">
-        <button class="btn-floating waves-effect waves-light red" v-on:click="createTask">
+        <button class="btn-floating waves-effect waves-light red" @click="createTask">
           <i class="material-icons">add</i>
         </button>
       </div>
@@ -16,14 +16,14 @@
     <div>
       <ul class="collection">
         <li
-        v-bind:id="'row_task_' + task.id"
+        :id="'row_task_' + task.id"
         class="collection-item"
         v-for="task in tasks"
         v-if="!task.done">
-          <label v-bind:for="'task_' + task.id">
-            <span class="word-color-black margin-of-button-and-title" v-bind:id="'task_' + task.id" >{{ task.title }}</span>
+          <label :for="'task_' + task.id">
+            <span class="word-color-black margin-of-button-and-title" :id="'task_' + task.id" >{{ task.title }}</span>
             <!-- 完了済みタスク一覧に移動するボタン -->
-            <button class="waves-light btn-small check-btn" v-on:click="doneTask(task.id)">
+            <button class="waves-light btn-small check-btn" @click="doneTask(task.id)">
             <i class="material-icons">check_box_outline_blank</i>
             </button>
           </label>
@@ -32,26 +32,26 @@
     </div>
 
     <!-- 完了済みタスクを表示するボタン -->
-    <button class="btn disp-btn" v-on:click="displayFinishedTasks">完了済みのタスクを表示</button>
+    <button class="btn disp-btn" @click="displayFinishedTasks">完了済みのタスクを表示</button>
     
     <!-- 完了済みタスク一覧 -->
-    <div id="finished-tasks" class="display-none">
+    <div class="finished-tasks" :class="{ 'display-none': clicked }">
       <ul class="collection">
         <li
-        v-bind:id="'row_task_' + task.id"
+        :id="'row_task_' + task.id"
         class="collection-item"
         v-for="task in doneTasks"
         v-if="task.done">
-          <label v-bind:for="'task_' + task.id">
-            <span class="margin-of-button-and-title" v-bind:id="'task_' + task.id" >{{ task.title }}</span>
+          <label :for="'task_' + task.id">
+            <span class="margin-of-button-and-title" :id="'task_' + task.id" >{{ task.title }}</span>
             <!-- 未完了タスク一覧に戻すボタン -->
-            <button class="waves-effect waves-light btn-small check-btn" v-on:click="notDoneTask(task.id)">
+            <button class="waves-effect waves-light btn-small check-btn" @click="notDoneTask(task.id)">
             <i class="material-icons">check_box</i>
             </button>
             <!-- 削除ボタン -->
-            <button class="waves-effect waves-light btn-small delete-btn" v-on:click="deleteTask(task.id)">
+            <button class="waves-effect waves-light btn-small delete-btn" @click="deleteTask(task.id)">
             <i class="material-icons">delete</i>
-            </button>            
+            </button>
           </label>
         </li>
       </ul>
@@ -67,14 +67,15 @@
       return {
         tasks: [],
         doneTasks: [],
-        newTask: ''
+        newTask: '',
+        clicked: true
       }
     },
 
     // インスタンスがマウントされたタイミングで実行(ライフサイクルダイアグラム)
     mounted() {
       this.fetchTasks();
-    },   
+    },
 
     methods: {
       // APIで取得した値をdataに格納する(tasks=未完了タスク、doneTasks=完了済みタスク)
@@ -82,11 +83,11 @@
         try {
           const response = await axios.get('/api/v1/tasks')
           const resTasks = response.data.tasks
-          resTasks.forEach((task) => {
-            if (task.done) {
-              this.doneTasks.push(task)
+          resTasks.forEach((resTask) => {
+            if (resTask.done) {
+              this.doneTasks.push(resTask)
             }else{
-              this.tasks.push(task);
+              this.tasks.push(resTask);
             };
           });
         }catch(e) {
@@ -99,8 +100,7 @@
         try {
           if (!this.newTask) return;
           const response = await axios.post('/api/v1/tasks', { task: { title: this.newTask } })
-          const resTask = response.data.task
-          this.tasks.unshift(resTask);
+          this.tasks.unshift(response.data.task);
           this.newTask = '';
         }catch(e) {
           console.log(e);
@@ -111,9 +111,8 @@
       async doneTask(task_id) {
         try {
           const response = await axios.put('/api/v1/tasks/' + task_id, { task: { done: true } })
-          const resTask = response.data.task
           const index = this.tasks.findIndex((task) => task.id === task_id);
-          this.doneTasks.unshift(resTask);
+          this.doneTasks.unshift(response.data.task);
           this.tasks.splice(index,1)
         }catch(e) {
           console.log(e);
@@ -122,16 +121,19 @@
 
       // ボタン→完了済みタスク一覧を表示する(デフォルトは非表示)
       displayFinishedTasks() {
-        document.getElementById('finished-tasks').classList.toggle('display-none');
+        if (this.clicked) {
+          this.clicked = false
+        }else{
+          this.clicked = true
+        }
       },
 
       // 未完了タスク一覧に戻す
       async notDoneTask(task_id) {
         try {
           const response = await axios.put('/api/v1/tasks/' + task_id, { task: { done: false } })
-          const resTask = response.data.task
           const index = this.doneTasks.findIndex((task) => task.id === task_id);
-          this.tasks.unshift(resTask);
+          this.tasks.unshift(response.data.task);
           this.doneTasks.splice(index,1);
         }catch(e) {
           console.log(e);
