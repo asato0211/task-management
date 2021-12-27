@@ -78,40 +78,46 @@
 
     methods: {
       // APIで取得した値をdataに格納する(tasks=未完了タスク、doneTasks=完了済みタスク)
-      fetchTasks() {
-        axios.get('/api/v1/tasks').then((response) => {
-          for(let i = 0; i < response.data.tasks.length; i++) {
-            if (response.data.tasks[i].done) {
-              this.doneTasks.push(response.data.tasks[i])
+      async fetchTasks() {
+        try {
+          const response = await axios.get('/api/v1/tasks')
+          const resTasks = response.data.tasks
+          resTasks.forEach((task) => {
+            if (task.done) {
+              this.doneTasks.push(task)
             }else{
-              this.tasks.push(response.data.tasks[i]);
+              this.tasks.push(task);
             };
-          }
-        }, (error) => {
-          console.log(error);
-        });
+          });
+        }catch(e) {
+          console.log(e);
+        }
       },
 
       // 新規タスクを追加
-      createTask() {
-        if (!this.newTask) return;
-        axios.post('/api/v1/tasks', { task: { title: this.newTask } }).then((response) => {
-          this.tasks.unshift(response.data.task);
+      async createTask() {
+        try {
+          if (!this.newTask) return;
+          const response = await axios.post('/api/v1/tasks', { task: { title: this.newTask } })
+          const resTask = response.data.task
+          this.tasks.unshift(resTask);
           this.newTask = '';
-        }, (error) => {
-          console.log(error);
-        });
+        }catch(e) {
+          console.log(e);
+        }
       },
 
       // 完了済みタスク一覧に移動
-      doneTask(task_id) {
-        axios.put('/api/v1/tasks/' + task_id, { task: { done: true } }).then((response) => {
+      async doneTask(task_id) {
+        try {
+          const response = await axios.put('/api/v1/tasks/' + task_id, { task: { done: true } })
+          const resTask = response.data.task
           const index = this.tasks.findIndex((task) => task.id === task_id);
-          this.doneTasks.unshift(response.data.task);
+          this.doneTasks.unshift(resTask);
           this.tasks.splice(index,1)
-        }, (error) => {
-          console.log(error);
-        });
+        }catch(e) {
+          console.log(e);
+        }
       },
 
       // ボタン→完了済みタスク一覧を表示する(デフォルトは非表示)
@@ -120,24 +126,27 @@
       },
 
       // 未完了タスク一覧に戻す
-      notDoneTask(task_id) {
-        axios.put('/api/v1/tasks/' + task_id, { task: { done: false } }).then((response) => {
+      async notDoneTask(task_id) {
+        try {
+          const response = await axios.put('/api/v1/tasks/' + task_id, { task: { done: false } })
+          const resTask = response.data.task
           const index = this.doneTasks.findIndex((task) => task.id === task_id);
-          this.tasks.unshift(response.data.task);
+          this.tasks.unshift(resTask);
           this.doneTasks.splice(index,1);
-        }, (error) => {
-          console.log(error);
-        });
+        }catch(e) {
+          console.log(e);
+        }
       },
 
       // タスクを削除(完了済み一覧から)
-      deleteTask(task_id) {
-        axios.delete('/api/v1/tasks/' + task_id, { task: { done: false } }).then((response) => {
+      async deleteTask(task_id) {
+        try {
+          await axios.delete('/api/v1/tasks/' + task_id, { task: { done: false } })
           const index = this.doneTasks.findIndex((task) => task.id === task_id);
           this.doneTasks.splice(index, 1);
-        }, (error) => {
-          console.log(error, response);
-        });
+        }catch(e) {
+          console.log(e);
+        }
       }
     }
   }
