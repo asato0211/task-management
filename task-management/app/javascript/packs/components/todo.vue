@@ -35,7 +35,7 @@
     <button class="btn disp-btn" @click="displayFinishedTasks">完了済みのタスクを表示</button>
     
     <!-- 完了済みタスク一覧 -->
-    <div class="finished-tasks" :class="{ 'display-none': clicked }">
+    <div :class="{ 'display-none': clicked }">
       <ul class="collection">
         <li
         :id="'row_task_' + task.id"
