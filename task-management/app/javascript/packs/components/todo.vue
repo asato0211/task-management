@@ -63,6 +63,8 @@
   import axios from 'axios';
 
   export default {
+    name: "Todo",
+    
     data() {
       return {
         tasks: [],
