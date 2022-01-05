@@ -6,7 +6,7 @@
         <input v-model="newTask" id="new-task-form" class="form-control padding-default" placeholder="タスクを追加してください!">
       </div>
       <div class="col s2 m1">
-        <button class="btn-floating waves-effect waves-light red" @click="createTask">
+        <button id="create-btn" class="btn-floating waves-effect waves-light red" @click="createTask">
           <i class="material-icons">add</i>
         </button>
       </div>
@@ -63,8 +63,7 @@
   import axios from 'axios';
 
   export default {
-    name: "Todo",
-    
+
     data() {
       return {
         tasks: [],
