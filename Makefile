@@ -15,3 +15,6 @@ migration:
 test:
 	docker exec -it task-management rails test
 	docker exec -it task-management rails test:system
+
+jest:
+	docker exec -it task-management	yarn test test/javascript
