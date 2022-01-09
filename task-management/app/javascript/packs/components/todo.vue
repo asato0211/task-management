@@ -23,7 +23,7 @@
           <label :for="'task_' + task.id">
             <span class="word-color-black margin-of-button-and-title" :id="'task_' + task.id" >{{ task.title }}</span>
             <!-- 完了済みタスク一覧に移動するボタン -->
-            <button class="waves-light btn-small check-btn" @click="doneTask(task.id)">
+            <button id="move-done-tasks-btn" class="waves-light btn-small check-btn" @click="doneTask(task.id)">
             <i class="material-icons">check_box_outline_blank</i>
             </button>
           </label>
@@ -35,7 +35,7 @@
     <button class="btn disp-btn" @click="displayFinishedTasks">完了済みのタスクを表示</button>
     
     <!-- 完了済みタスク一覧 -->
-    <div :class="{ 'display-none': clicked }">
+    <div id="done-tasks" :class="{ 'display-none': clicked }">
       <ul class="collection">
         <li
         :id="'row_task_' + task.id"
@@ -45,11 +45,11 @@
           <label :for="'task_' + task.id">
             <span class="margin-of-button-and-title" :id="'task_' + task.id" >{{ task.title }}</span>
             <!-- 未完了タスク一覧に戻すボタン -->
-            <button class="waves-effect waves-light btn-small check-btn" @click="notDoneTask(task.id)">
+            <button id="return-tasks-btn" class="waves-effect waves-light btn-small check-btn" @click="notDoneTask(task.id)">
             <i class="material-icons">check_box</i>
             </button>
             <!-- 削除ボタン -->
-            <button class="waves-effect waves-light btn-small delete-btn" @click="deleteTask(task.id)">
+            <button id="delete-task-btn" class="waves-effect waves-light btn-small delete-btn" @click="deleteTask(task.id)">
             <i class="material-icons">delete</i>
             </button>
           </label>
