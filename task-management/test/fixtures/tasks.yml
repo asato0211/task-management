@@ -2,10 +2,10 @@
 
 one:
   id: 1
-  title: MyString
+  title: Railsの学習
   done: false
 
 two:
   id: 2
-  title: MyString
+  title: Vueの学習
   done: true
