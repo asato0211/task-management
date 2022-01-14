@@ -6,6 +6,3 @@
 - Vue
 - mysql
 - Docker
-  
-## Link
-https://task-management-asato0211.herokuapp.com
